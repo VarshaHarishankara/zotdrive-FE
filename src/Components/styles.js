@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button';
+import TextField from '@mui/material/TextField';
 
 export const LeftMenuView = styled.div`
 border-right: 1px solid ${props => props.borderColor};
@@ -14,18 +15,19 @@ margin:40px;
 export const MainContentView = styled.div`
 display: flex;
 width: 100%;
+flex-direction: row;
 `;
 
 export const MainView = styled.div`
 display: flex;
 height: 100vh;
 width: 100%;
-align-items: center;
-flex-direction: column;
+flex-direction: flex-start;
 `;
 
 export const SearchView =  styled.div`
-width: 50%;
+width: 70%;
+margin-top:20px;
 `;
 
 export const StyledButton = styled(Button)`
@@ -46,3 +48,25 @@ export const ItemView = styled.div`
 export const OptionsContainer = styled.div`
 margin-top: 70px;
 `
+
+export const WhiteBorderTextField = styled(TextField)`
+  & label.Mui-focused {
+    color: black;
+  }
+  & .MuiOutlinedInput-root {
+    &.Mui-focused fieldset {
+      border-color: black;
+    }
+  }
+`;
+
+export const ProfileBtn = styled(Button)`
+width:100%;
+`;
+
+export const ProfileView = styled.div`
+display: flex;
+width: 30%;
+height:10%;
+align-items: center;
+`;

@@ -1,17 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import TextField from "@mui/material/TextField";
-import { MainView, SearchView } from './styles';
+import Box from '@mui/material/Box';
+import Search from '@mui/icons-material/Search';
+import { MainView, SearchView, WhiteBorderTextField } from './styles';
 
 export function ZDSearchBar(){
     return(
         <MainView>
             <SearchView>
-                <TextField
-                id="outlined-basic"
-                variant="outlined"
-                fullWidth
-                label="Search file or folder"
-                />
+            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <Search sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                <WhiteBorderTextField id="input-with-sx" fullWidth label="Search file or folder" variant="standard" />
+            </Box>
             </SearchView>
         </MainView>
     )

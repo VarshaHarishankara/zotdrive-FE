@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { ZDSearchBar } from './ZDSearchBar';
+import {ZDProfile} from './ZDProfile';
 import {MainContentView}  from './styles';
 
 export function ZDMainContent(){
@@ -9,6 +10,7 @@ export function ZDMainContent(){
     return(
         <MainContentView>
             <ZDSearchBar/>
+            <ZDProfile profileName={'John Doe'}/>
         </MainContentView>
     )
 }
