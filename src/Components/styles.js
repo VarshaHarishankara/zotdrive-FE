@@ -14,8 +14,14 @@ margin:40px;
 
 export const MainContentView = styled.div`
 display: flex;
-width: 100%;
 flex-direction: row;
+height: 10%;
+`;
+
+export const ContentView = styled.div`
+display: flex;
+width: 100%;
+flex-direction: column;
 `;
 
 export const MainView = styled.div`
@@ -69,4 +75,12 @@ display: flex;
 width: 30%;
 height:10%;
 align-items: center;
+`;
+
+export const FilesView = styled.div`
+margin-left: 30px;
+`;
+
+export const FileItem = styled.div`
+margin-bottom:30px;
 `;
