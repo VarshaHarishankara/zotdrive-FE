@@ -15,7 +15,7 @@ margin:40px;
 export const MainContentView = styled.div`
 display: flex;
 flex-direction: row;
-height: 10%;
+height: 20%;
 `;
 
 export const ContentView = styled.div`

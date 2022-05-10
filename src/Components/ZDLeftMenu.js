@@ -19,7 +19,6 @@ export function ZDLeftMenu(props){
     },[])
 
     useEffect(() => {
-        console.log("here")
         if(uploadFile != null){
             const formData = new FormData();
             const fileName = uploadFile[0].name
