@@ -1,18 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import {HomeView} from './styles'
+import {ContextView, HomeView} from './styles'
+import background from '../assets/cloud.jpeg'
+import {useWindowDimensions} from '../Manager/ZDDimensions'
+import {ZDNavBar} from '../components/ZDNavBar'
+import Typography from '@mui/material/Typography';
 
 export const ZDHome = () => {
+    const { height, width } = useWindowDimensions();
+    let styleHeight = height+'px';
     return(
-      <HomeView>
-        <ul>
-          <li>
-            <Link to="/signup">Sign Up</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-        </ul>
+      <HomeView style={{backgroundImage: `url(${background})`, height: styleHeight}}>
+        <ZDNavBar/>
+        {/* <ContextView>
+          <Typography variant="h3" color="#ffffff">
+              Manage your files efficiently
+          </Typography>   
+        </ContextView> */}
       </HomeView>
     )
 }

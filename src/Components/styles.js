@@ -67,20 +67,20 @@ export const WhiteBorderTextField = styled(TextField)`
 `;
 
 export const ProfileBtn = styled(Button)`
-width:100%;
+  width:100%;
 `;
 
 export const ProfileView = styled.div`
-display: flex;
-width: 30%;
-height:10%;
-align-items: center;
+  display: flex;
+  width: 30%;
+  height:10%;
+  align-items: center;
 `;
 
 export const FilesView = styled.div`
-margin-left: 30px;
+  margin-left: 30px;
 `;
 
 export const FileItem = styled.div`
-margin-bottom:30px;
+  margin-bottom:30px;
 `;

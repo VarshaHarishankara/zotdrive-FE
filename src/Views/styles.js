@@ -7,7 +7,10 @@ export const MainView = styled.div`
 `;
 
 export const OuterView = styled.div`
-    background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);   
+    background: #470F9E;
+    background: -webkit-linear-gradient(top left, #470F9E, #8A02CE);
+    background: -moz-linear-gradient(top left, #470F9E, #8A02CE);
+    background: linear-gradient(to bottom right, #470F9E, #8A02CE);  
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,9 +18,15 @@ export const OuterView = styled.div`
 `;
 
 export const HomeView = styled.div`
+    flex-direction: column;
     display: flex;
     justify-content: center;
     flex:1;
+    height:'100vh',
+    marginTop:'-70px',
+    fontSize:'50px',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
 `;
 
 export const FormView = styled.div`
@@ -86,4 +95,12 @@ export const InputField = styled.input`
     transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out, 0.1s padding ease-in-out;
     -webkit-appearance: none;
     margin-top:5px;
+`;
+
+export const ContextView = styled.div`
+    display: flex;
+    justify-content:flex-end;
+    align-items: flex-end;
+    margin-right: 100px;
+    margin-bottom: 50px;
 `;
