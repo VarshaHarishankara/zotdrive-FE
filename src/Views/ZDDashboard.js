@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import { ZDLeftMenu } from '../Components/ZDLeftMenu';
-import { ZDMainContent } from '../Components/ZDMainContent';
+import { ZDLeftMenu } from '../components/ZDLeftMenu';
+import { ZDMainContent } from '../components/ZDMainContent';
 import {MainView} from './styles';
 
-export function ZDDashboard(){
+export const ZDDashboard = () => {
     const [data, setData] = useState(false)
     const handleUpdate = (result) => {
         setData(result)

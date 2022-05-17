@@ -1,24 +1,21 @@
 import React, { Component } from 'react'
-import { ZDDashboard } from './Views/ZDDashboard';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {ZDHome} from './views/ZDHome';
+import { ZDDashboard } from './views/ZDDashboard';
+import { ZDSignUp } from './views/ZDSignUp';
+import { ZDLogin } from './views/ZDLogin';
+
 class App extends Component {
-  state = {
-    clients: []
-  };
-
-  async componentDidMount() {
-    // const response = await fetch('/file-chunk');
-    // console.log(response);
-    // const body = await response.json();
-    
-    // this.setState({clients: body});
-  }
-
   render() {
-    const {clients} = this.state;
     return (
-        <div className="App">
-          <ZDDashboard/>
-        </div>
+      <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<ZDHome/>}/>
+            <Route path="/dashboard" element={<ZDDashboard/>}/>
+            <Route path="/signup" element={<ZDSignUp/>} />
+            <Route path="/login" element={<ZDLogin/>} />
+        </Routes>
+    </BrowserRouter>
     );
   }
 }
