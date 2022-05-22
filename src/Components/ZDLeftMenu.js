@@ -5,7 +5,7 @@ import {Menu,MenuItem} from '@mui/material';
 import { Storage,Bookmarks,Delete, FolderShared } from '@mui/icons-material';
 import { LeftContent ,LeftMenuView, OptionsContainer,StyledButton } from './styles';
 import { ZDListItem } from './ZDListItem';
-import {fetchFileNames} from '../Manager/ZDDataManager'
+import {fetchFileNames, uploadFileToServer} from '../Manager/ZDDataManager'
 
 
 export function ZDLeftMenu(props){
@@ -20,28 +20,10 @@ export function ZDLeftMenu(props){
 
     useEffect(() => {
         if(uploadFile != null){
-            const formData = new FormData();
-            const fileName = uploadFile[0].name
-            formData.append('file', uploadFile[0]);
-            let url = "/file-chunk/"+fileName
-            axios
-            .post(url, formData, {
-                params:{
-                    "fileId": 0,
-                    "chunkID": 0
-                },
-              headers: {
-                "Content-Type": "multipart/form-data"
-              }
-            })
-            .then((response) => {
+            uploadFileToServer(uploadFile,() => {
                 fetchData()
             })
-            .catch((error) => {
-              console.log("fail")
-            });
-        }
-       
+        } 
     },[uploadFile])
 
     const fetchData = () => {
@@ -79,7 +61,9 @@ export function ZDLeftMenu(props){
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}>Upload/Create</StyledButton>
+                onClick={handleClick}
+                color="inherit"
+                >Upload/Create</StyledButton>
                 <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}

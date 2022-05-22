@@ -35,6 +35,11 @@ export const ZDLogin = () => {
         event.preventDefault()
         loginUser(userObject, (response) =>{
             if(response.status == 200){
+                const res = response.data
+                console.log(res)
+                localStorage.setItem("token", res.token)
+                localStorage.setItem("rootID", res.rootID)
+                localStorage.setItem("parentID", null)
                 setRedirect(true)
             }else{
                 alert("Unsuccessfull");
