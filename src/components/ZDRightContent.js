@@ -9,12 +9,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import DownloadIcon from '@mui/icons-material/Download';
+import EditIcon from '@mui/icons-material/Edit';
 import {deleteFile,downloadFile, fetchFileNames} from '../Manager/ZDDataManager'
+import { ZDEditDialog } from './ZDEditDialog';
 
 export const ZDRightContent = (props) => {
     const [data, setData] = useState(null)
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const [editDialogOpen, setEditDialogOpen] = useState(false)
     
     useEffect(() => {
         setData(props.item) 
@@ -45,6 +48,14 @@ export const ZDRightContent = (props) => {
         })
     };
 
+    const handleUpdateData = () => {
+        fetchData()
+    }
+
+    const handleEditClose = () => {
+        setEditDialogOpen(true)
+    }
+
     const handleDeleteClose = () => {
         setAnchorEl(null);
         deleteFile(data.objectid,(response) => {
@@ -65,10 +76,14 @@ export const ZDRightContent = (props) => {
         return(
             <DetailsView>
                 <RightLabelView style={{marginRight: "20px"}}>
+                    {detailsRow("Type", "#696969")}  
+                    {detailsRow("Size", "#696969")}  
                     {detailsRow("Tags", "#696969")}    
                     {detailsRow("Created", "#696969")}  
                 </RightLabelView>
                 <RightLabelView>
+                    {detailsRow(data.type)}     
+                    {detailsRow(data.size)}     
                     {detailsRow(data.tags)}    
                     {detailsRow(data.createdOn)}  
                 </RightLabelView>  
@@ -107,6 +122,12 @@ export const ZDRightContent = (props) => {
                 'aria-labelledby': 'basic-button',
                 }}
                 >
+                    <MenuItem onClick={handleEditClose}>
+                        <ListItemIcon>
+                            <EditIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Edit</ListItemText>              
+                    </MenuItem>
                     <MenuItem onClick={handleDeleteClose}>
                         <ListItemIcon>
                             <DeleteIcon fontSize="small" />
@@ -121,6 +142,12 @@ export const ZDRightContent = (props) => {
                     </MenuItem>
                 </Menu>                   
             </FileOptionsView>
+        )
+    }
+
+    const renderEditDialog = () => {
+        return(
+            <ZDEditDialog isOpen={editDialogOpen} item={data} shouldFetchData={handleUpdateData} handleEditDialogClose={() => setEditDialogOpen(false)}/>
         )
     }
 
@@ -139,6 +166,7 @@ export const ZDRightContent = (props) => {
             </Typography> 
             {fileDetails()}
             {fileOptionsView()}
+            {renderEditDialog()}
         </RightContentView>
         :
         <RightContentDefaultView>

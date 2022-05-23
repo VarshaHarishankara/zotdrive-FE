@@ -5,51 +5,59 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import {uploadFileToServer} from '../Manager/ZDDataManager'
+import { updateFile } from '../Manager/ZDDataManager';
 import TextField from '@mui/material/TextField';
 import {FormDialog} from './styles';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
-export const ZDFileDialog = (props) => {
-    const fileInputRef = useRef();
-    const [open, setOpen] = useState(false);
-    const [uploadFile, setUploadFile] = useState(null);
-    const [tags, setTags] = useState("");
+export const ZDEditDialog = (props) => {
+    const [filename, setFilename] = useState('')
+    const [tags, setTags] = useState('')
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         setOpen(props.isOpen);
     },[props.isOpen])
 
     const handleClose = () => {
-        props.handleDialogClose(false)
+        props.handleEditDialogClose(false)
         setOpen(false);
     };
 
-    const handleUploadClick = () => {
+    useEffect(() => {
+        setFilename(props.item.name)
+        setTags(props.item.tags)
+    },[props])
+
+    const handleFilenameChange = (event) => {
+        if(event.target.value !== filename)
+            setFilename(event.target.value)
+    }
+
+    const handleTagsChange = (event) => {
+        if(event.target.value!== tags)
+            setTags(event.target.value) 
+    }
+
+    const handleSaveClick = () => {
         handleClose()
-        if(uploadFile != null){
-            uploadFileToServer(uploadFile,tags, () => {
-                fileInputRef.current.value = ""
-                setUploadFile(null)
-                setTags("")
-                props.shouldFetchData()
-            })
-        } 
+        updateFile(filename, tags, props.item.objectid, () => {
+            handleClose()
+            setTags(props.item.tags)
+            setFilename(props.item.name)
+            props.shouldFetchData()
+        },()=>{
+            alert("Could not save the changes")
+        })
     }
 
     const handleCancelClick = () => {
         handleClose()
-        setTags("")
-        fileInputRef.current.value = ""
-        setUploadFile(null)
-    }
-
-    const handleTagsChange = (event) => {
-        console.log(event.target.value)
-        setTags(event.target.value);
+        setTags(props.item.tags)
+        setFilename(props.item.name)
     }
 
     return (
@@ -63,13 +71,17 @@ export const ZDFileDialog = (props) => {
             onClose={handleClose}
             aria-describedby="alert-dialog-slide-description"
         >
-            <DialogTitle>{"Upload file"}</DialogTitle>
+            <DialogTitle>{"Edit"}</DialogTitle>
             <DialogContent>
                 <FormDialog>
-                    <input ref={fileInputRef} type="file" onChange={(e) => setUploadFile(e.target.files)} />
+                    <TextField
+                        label="File name"
+                        margin="normal"
+                        value={filename}
+                        onChange={handleFilenameChange}
+                    />
                     <TextField
                         label="Tags"
-                        helperText="Please add tags to your file"
                         margin="normal"
                         value={tags}
                         onChange={handleTagsChange}
@@ -78,7 +90,7 @@ export const ZDFileDialog = (props) => {
             </DialogContent>
             <DialogActions>
             <Button onClick={handleCancelClick}>Cancel</Button>
-            <Button onClick={handleUploadClick}>Upload</Button>
+            <Button onClick={handleSaveClick}>Save</Button>
             </DialogActions>
         </Dialog>
         </div>

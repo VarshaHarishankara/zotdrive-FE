@@ -121,3 +121,30 @@ export const downloadFile = (fileId, success, failure) => {
       failure(error)
     })
 }
+
+export const updateFile = (filename, tags, objectId, success, failure) => {
+    let parentId = localStorage.getItem("rootID")
+    const formData = new FormData();
+              
+    if(localStorage.getItem("parentID") !== "null"){
+      parentId = localStorage.getItem("parentID")
+    }
+    const url = "/file-chunk/updateFile/"+objectId
+    formData.append('Tags', tags);
+    formData.append('parentId', parentId);
+    formData.append('fileName', filename);
+  
+    axios
+    .post(url, formData, {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    })
+    .then((response) => {
+      success(response)
+    })
+    .catch((error) => {
+      console.log("fail")
+      failure()
+    });
+}
