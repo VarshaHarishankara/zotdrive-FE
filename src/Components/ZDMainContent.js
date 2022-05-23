@@ -11,7 +11,16 @@ import { COLORS } from '../theme/colors';
 export function ZDMainContent(props){
     const [searchText, setSearchText] = useState('');
     const [selectedItem, setSelectedItem] = useState(null);
-    const data = props.results.data
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        setData(props.results.data)
+    },[props])
+
+    const handleUpdateData = (response) => {
+        setData(response.data)
+    }
+
     const handleDownloadFile = (event) => {
         let fileName  = event.currentTarget.value
         let url = "/file-chunk/downloadFile/"+fileName
@@ -48,14 +57,14 @@ export function ZDMainContent(props){
                             data ? data.map((file, index) => {
                                 return (
                                 <Grid item xs={6} sm={3} key={index}>
-                                    <Button color="inherit" onClick={() => handleOnClick(file)}><ZDFileItem fileName={file.name}/></Button>
+                                    <Button color="inherit" onClick={() => handleOnClick(file)}><ZDFileItem selected={selectedItem != null ? '#ADD8E6' : 'transparent'} fileName={file.name}/></Button>
                                 </Grid>
                             )})
                             : <div></div>
                         }
                     </Grid>
                 </FilesView>
-                <ZDRightContent item={selectedItem}/>
+                <ZDRightContent item={selectedItem} updatedData={handleUpdateData}/>
             </FilesAndDetailsView>
            
         </ContentView>

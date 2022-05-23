@@ -95,18 +95,25 @@ export const FileIconView = styled.div`
     width: 200px;
     border: 2px solid #808080;
     border-radius: 10px;
+    &:hover {
+      border-color: #1F51FF;
+    }
 `;
 
 export const FileInitialView = styled.div`
     border-bottom: 2px solid #808080;
+    &:hover {
+      border-color: #1F51FF;
+    }
 `;
 
 export const FileNameView = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center
-
+  align-items: center;
+  background-color: ${props => props.selectedColor};
+  border-radius: 3px;
 `;
 
 export const InitialContainer = styled.div`
@@ -145,6 +152,15 @@ export const RightContentView = styled.div`
   flex-direction: column;
 `;
 
+export const RightContentDefaultView = styled.div`
+  display: flex;
+  flex: 0 0 250px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px
+`;
+
 export const RightLabelView = styled.div`
   display: flex;
   flex-direction: column;
@@ -163,4 +179,9 @@ export const FileOptionsView = styled.div`
   flex-direction: row;
   margin: 20px;
   justify-content: space-between
+`;
+
+export const FormDialog = styled.form`
+    display: flex;
+    flex-direction: column;
 `;

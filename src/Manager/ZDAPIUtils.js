@@ -13,6 +13,5 @@ export const GET_API = (url, parameters, success, failure) => {
     })
     .catch((error) => {
         failure(error)
-      console.log("fail")
     });
 }

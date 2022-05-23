@@ -1,30 +1,21 @@
-import React, { useState,useEffect,useRef } from 'react';
-import axios from "axios";
+import React, { useState,useEffect } from 'react';
 import { COLORS } from '../theme/colors';
 import {Menu,MenuItem} from '@mui/material';
 import { Storage,Bookmarks,Delete, FolderShared } from '@mui/icons-material';
 import { LeftContent ,LeftMenuView, OptionsContainer,StyledButton } from './styles';
 import { ZDListItem } from './ZDListItem';
 import {fetchFileNames, uploadFileToServer} from '../Manager/ZDDataManager'
+import { ZDFileDialog } from './ZDFileDialog';
 
 
 export function ZDLeftMenu(props){
-    const hiddenFileInput = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [uploadFile, setUploadFile] = useState(null);
     const open = Boolean(anchorEl);
+    const [openDialog, setOpenDialog] = useState(false)
 
     useEffect(() => {
         fetchData()
     },[])
-
-    useEffect(() => {
-        if(uploadFile != null){
-            uploadFileToServer(uploadFile,() => {
-                fetchData()
-            })
-        } 
-    },[uploadFile])
 
     const fetchData = () => {
         fetchFileNames((result) => {
@@ -40,7 +31,8 @@ export function ZDLeftMenu(props){
     };
 
     const handleUploadFileClick = () => {
-        hiddenFileInput.current.click();
+        handleClose()
+        setOpenDialog(true)
     }
 
     const renderListItems= () => {
@@ -53,6 +45,13 @@ export function ZDLeftMenu(props){
             </OptionsContainer>
         )
     }
+
+    const renderDialog = () => {
+        return(
+            <ZDFileDialog isOpen={openDialog} shouldFetchData={fetchData} handleDialogClose={(value) => setOpenDialog(value)}/>
+        )
+    }
+
     return(
         <LeftMenuView borderColor={COLORS.borderColor}>
             <LeftContent>
@@ -74,15 +73,10 @@ export function ZDLeftMenu(props){
                 }}
                 >
                     <MenuItem onClick={handleClose}>Create Folder</MenuItem>
-                    <MenuItem onClick={handleUploadFileClick}>
-                        Upload File
-                        <input type="file" 
-                        ref={hiddenFileInput}
-                        onChange={(e) => setUploadFile(e.target.files)} 
-                        style={{display: 'none'}} />
-                    </MenuItem>
+                    <MenuItem onClick={handleUploadFileClick}>Upload File</MenuItem>
                 </Menu>
                 {renderListItems()}
+                {renderDialog()}
             </LeftContent>
         </LeftMenuView>
     )

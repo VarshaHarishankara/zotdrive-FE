@@ -2,7 +2,6 @@ import axios from "axios";
 import {GET_API} from "./ZDAPIUtils"
 
 export const fetchFileNames = (callback) => {
-  console.log("")
   let parentId = localStorage.getItem("rootID")
             
   if(localStorage.getItem("parentID") !== "null"){
@@ -56,10 +55,9 @@ export const loginUser = (object, callback) => {
     })
 }
 
-export const uploadFileToServer = (uploadFile, callback) => {
+export const uploadFileToServer = (uploadFile, tags, callback) => {
     const formData = new FormData();
     const fileName = uploadFile[0].name
-    const tags = "test"
     let parentId = localStorage.getItem("rootID")
     
     if(localStorage.getItem("parentID") !== "null"){
@@ -86,4 +84,40 @@ export const uploadFileToServer = (uploadFile, callback) => {
     .catch((error) => {
       console.log("fail")
     });
+}
+
+export const deleteFile = (fileId, success, failure) => {
+  let url = "/file-chunk/"+fileId
+    axios
+    .delete(url,{
+      headers:{
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    })
+    .then((response) => {
+        success(response)
+    })
+    .catch((error) => {
+      console.log("fail")
+      failure(error)
+    });
+}
+
+export const downloadFile = (fileId, success, failure) => {
+    axios
+    .get("/file-chunk/downloadFile",{
+      params:{
+        "uuid" : fileId
+      },
+      headers:{
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      } 
+    },{responseType: 'blob'})
+    .then((response) => {
+        success(response)
+    })
+    .catch((error) => {
+      console.log("fail")
+      failure(error)
+    })
 }
