@@ -40,6 +40,7 @@ export const ZDLogin = () => {
                 localStorage.setItem("token", res.token)
                 localStorage.setItem("rootID", res.rootID)
                 localStorage.setItem("parentID", null)
+                localStorage.setItem("emailId", res.email)
                 setRedirect(true)
             }else{
                 alert("Unsuccessfull");

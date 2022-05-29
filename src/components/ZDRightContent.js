@@ -12,12 +12,15 @@ import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import {deleteFile,downloadFile, fetchFileNames} from '../Manager/ZDDataManager'
 import { ZDEditDialog } from './ZDEditDialog';
+import ShareIcon from '@mui/icons-material/Share';
+import { ZDShareDialog } from './ZDShareDialog';
 
 export const ZDRightContent = (props) => {
     const [data, setData] = useState(null)
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const [editDialogOpen, setEditDialogOpen] = useState(false)
+    const [shareDialogOpen, setShareDialogOpen] = useState(false)
     
     useEffect(() => {
         setData(props.item) 
@@ -53,7 +56,13 @@ export const ZDRightContent = (props) => {
     }
 
     const handleEditClose = () => {
+        handleClose()
         setEditDialogOpen(true)
+    }
+
+    const handleShareClose = () =>{
+        handleClose()
+        setShareDialogOpen(true)
     }
 
     const handleDeleteClose = () => {
@@ -77,14 +86,14 @@ export const ZDRightContent = (props) => {
             <DetailsView>
                 <RightLabelView style={{marginRight: "20px"}}>
                     {detailsRow("Type", "#696969")}  
-                    {detailsRow("Size", "#696969")}  
-                    {detailsRow("Tags", "#696969")}    
+                    {data.type != null &&  detailsRow("Size", "#696969")}  
+                    { data.type != null && detailsRow("Tags", "#696969")}    
                     {detailsRow("Created", "#696969")}  
                 </RightLabelView>
                 <RightLabelView>
-                    {detailsRow(data.type)}     
-                    {detailsRow(data.size)}     
-                    {detailsRow(data.tags)}    
+                    {detailsRow(data.type == null ? "Folder" : data.type)}     
+                    {data.type != null && detailsRow(data.size)}     
+                    {data.type != null && detailsRow(data.tags)}    
                     {detailsRow(data.createdOn)}  
                 </RightLabelView>  
             </DetailsView>
@@ -103,7 +112,7 @@ export const ZDRightContent = (props) => {
     const fileOptionsView = () => {
         return(
             <FileOptionsView>
-                <Button variant="outlined" color="inherit">Open file</Button>
+                <Button variant="outlined" color="inherit">{data.folder ? "Open Folder" : "Open File"}</Button>
                 <Button 
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
@@ -128,18 +137,24 @@ export const ZDRightContent = (props) => {
                         </ListItemIcon>
                         <ListItemText>Edit</ListItemText>              
                     </MenuItem>
+                    <MenuItem onClick={handleShareClose}>
+                        <ListItemIcon>
+                            <ShareIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Share</ListItemText>              
+                    </MenuItem>
                     <MenuItem onClick={handleDeleteClose}>
                         <ListItemIcon>
                             <DeleteIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Delete</ListItemText>              
                     </MenuItem>
-                    <MenuItem onClick={handleDownloadClose}>
+                    {!data.folder && <MenuItem onClick={handleDownloadClose}>
                         <ListItemIcon>
                             <DownloadIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Download</ListItemText>              
-                    </MenuItem>
+                    </MenuItem>}
                 </Menu>                   
             </FileOptionsView>
         )
@@ -147,7 +162,13 @@ export const ZDRightContent = (props) => {
 
     const renderEditDialog = () => {
         return(
-            <ZDEditDialog isOpen={editDialogOpen} item={data} shouldFetchData={handleUpdateData} handleEditDialogClose={() => setEditDialogOpen(false)}/>
+            <ZDEditDialog isFolder={data.folder} isOpen={editDialogOpen} item={data} shouldFetchData={handleUpdateData} handleEditDialogClose={() => setEditDialogOpen(false)}/>
+        )
+    }
+
+    const renderShareDialog = () => {
+        return(
+            <ZDShareDialog isOpen={shareDialogOpen} item={data} shouldFetchData={handleUpdateData} handleShareDialogClose={() => setShareDialogOpen(false)}/>
         )
     }
 
@@ -167,6 +188,7 @@ export const ZDRightContent = (props) => {
             {fileDetails()}
             {fileOptionsView()}
             {renderEditDialog()}
+            {renderShareDialog()}
         </RightContentView>
         :
         <RightContentDefaultView>

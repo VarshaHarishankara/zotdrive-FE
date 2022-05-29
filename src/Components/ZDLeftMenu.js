@@ -6,12 +6,14 @@ import { LeftContent ,LeftMenuView, OptionsContainer,StyledButton } from './styl
 import { ZDListItem } from './ZDListItem';
 import {fetchFileNames, uploadFileToServer} from '../Manager/ZDDataManager'
 import { ZDFileDialog } from './ZDFileDialog';
+import { ZDFolderDialog } from './ZDFolderDialog';
 
 
 export function ZDLeftMenu(props){
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const [openDialog, setOpenDialog] = useState(false)
+    const [openFolderDialog, setOpenFolderDialog] = useState(false)
 
     useEffect(() => {
         fetchData()
@@ -35,6 +37,11 @@ export function ZDLeftMenu(props){
         setOpenDialog(true)
     }
 
+    const handleCreateFolder = () => {
+        handleClose()
+        setOpenFolderDialog(true)
+    }
+
     const renderListItems= () => {
         return(
             <OptionsContainer>
@@ -49,6 +56,12 @@ export function ZDLeftMenu(props){
     const renderDialog = () => {
         return(
             <ZDFileDialog isOpen={openDialog} shouldFetchData={fetchData} handleDialogClose={(value) => setOpenDialog(value)}/>
+        )
+    }
+
+    const renderFolderDialog = () =>{
+        return(
+            <ZDFolderDialog isOpen={openFolderDialog} shouldFetchData={fetchData} handleDialogClose={(value) => setOpenFolderDialog(value)}/>
         )
     }
 
@@ -72,11 +85,12 @@ export function ZDLeftMenu(props){
                 'aria-labelledby': 'basic-button',
                 }}
                 >
-                    <MenuItem onClick={handleClose}>Create Folder</MenuItem>
+                    <MenuItem onClick={handleCreateFolder}>Create Folder</MenuItem>
                     <MenuItem onClick={handleUploadFileClick}>Upload File</MenuItem>
                 </Menu>
                 {renderListItems()}
                 {renderDialog()}
+                {renderFolderDialog()}
             </LeftContent>
         </LeftMenuView>
     )

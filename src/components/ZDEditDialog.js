@@ -80,12 +80,12 @@ export const ZDEditDialog = (props) => {
                         value={filename}
                         onChange={handleFilenameChange}
                     />
-                    <TextField
+                    {!props.isFolder && <TextField
                         label="Tags"
                         margin="normal"
                         value={tags}
                         onChange={handleTagsChange}
-                    />
+                    />}
                 </FormDialog>
             </DialogContent>
             <DialogActions>

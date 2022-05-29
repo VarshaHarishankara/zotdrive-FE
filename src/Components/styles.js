@@ -16,6 +16,7 @@ export const MainContentView = styled.div`
 display: flex;
 flex-direction: row;
 height: 10%;
+border-bottom: 1px solid ${props => props.borderColor};
 `;
 
 export const ContentView = styled.div`
@@ -76,7 +77,6 @@ export const ProfileBtn = styled(Button)`
 export const ProfileView = styled.div`
   display: flex;
   width: 30%;
-  height:10%;
   align-items: center;
 `;
 

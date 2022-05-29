@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import Typography from '@mui/material/Typography';
 import { ZDSearchBar } from './ZDSearchBar';
 import {ZDProfile} from './ZDProfile';
 import {ContentView,MainContentView, FilesAndDetailsView,FilesView}  from './styles';
@@ -7,18 +8,25 @@ import axios from 'axios';
 import {ZDFileItem} from '../components/ZDFileItem';
 import { ZDRightContent } from './ZDRightContent';
 import { COLORS } from '../theme/colors';
+import {ZDFolderItem} from './ZDFolderItem';
+import {fetchFileNames} from '../Manager/ZDDataManager'
 
 export function ZDMainContent(props){
     const [searchText, setSearchText] = useState('');
     const [selectedItem, setSelectedItem] = useState(null);
-    const [data, setData] = useState([])
+    const [files, setFiles] = useState([])
+    const [folders, setFolders] = useState([])
+    const username = localStorage.getItem("emailId");
 
     useEffect(() => {
-        setData(props.results.data)
+        setFiles(props.results.files)
+        setFolders(props.results.folders)
     },[props])
 
     const handleUpdateData = (response) => {
-        setData(response.data)
+        setSelectedItem(null)
+        setFiles(response.files)
+        setFolders(response.folders)
     }
 
     const handleDownloadFile = (event) => {
@@ -44,20 +52,49 @@ export function ZDMainContent(props){
     const handleOnClick = (file) => {
         setSelectedItem(file)
     }
+
+    const handleDoubleClick = (folder) => {
+        localStorage.setItem("parentID",folder.objectid)
+        fetchFileNames((response) =>{
+            handleUpdateData(response)
+        })
+    }
+
     return(
         <ContentView>
-            <MainContentView>
+            <MainContentView borderColor={COLORS.borderColor}>
                         <ZDSearchBar/>
-                        <ZDProfile profileName={'John Doe'}/>
+                        <ZDProfile profileName={username}/>
             </MainContentView>
             <FilesAndDetailsView>
                 <FilesView borderColor={COLORS.borderColor}>
+                    <Typography variant="h5" component="div" style={{marginTop:'30px', marginLeft: '10px'}}>
+                        {'Folders'}
+                    </Typography>  
                     <Grid container spacing={3}>
                         {
-                            data ? data.map((file, index) => {
+                            folders ? folders.map((file, index) => {
                                 return (
                                 <Grid item xs={6} sm={3} key={index}>
-                                    <Button color="inherit" onClick={() => handleOnClick(file)}><ZDFileItem selected={selectedItem != null ? '#ADD8E6' : 'transparent'} fileName={file.name}/></Button>
+                                    <Button color="inherit" onClick={() => handleOnClick(file)} onDoubleClick={() => handleDoubleClick(file)}>
+                                        {file.folder && <ZDFolderItem folder={file.name}/>}
+                                    </Button>
+                                </Grid>
+                            )})
+                            : <div></div>
+                        }
+                    </Grid>
+                    <Typography variant="h5" component="div" style={{marginTop:'30px', marginLeft: '10px'}}>
+                        {'Home Files'}
+                    </Typography>  
+                    <Grid container spacing={3}>
+                        {
+                            files ? files.map((file, index) => {
+                                return (
+                                <Grid item xs={6} sm={3} key={index}>
+                                    <Button color="inherit" onClick={() => handleOnClick(file)}>
+                                        {!file.folder && <ZDFileItem selected={selectedItem != null ? '#ADD8E6' : 'transparent'} fileName={file.name}/>}
+                                    </Button>
                                 </Grid>
                             )})
                             : <div></div>

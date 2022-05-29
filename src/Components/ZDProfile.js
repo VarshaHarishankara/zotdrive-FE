@@ -3,11 +3,14 @@ import {Menu,MenuItem} from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Person from '@mui/icons-material/Person';
 import {ProfileBtn, ProfileView} from './styles';
+import {useNavigate} from 'react-router-dom';
 
 export function ZDProfile(props){
     const {profileName} = props
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    let navigate = useNavigate();
+
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -15,6 +18,11 @@ export function ZDProfile(props){
       setAnchorEl(null);
     };
 
+    const handleLogout = () => {
+      handleClose()
+      localStorage.clear()
+      navigate("/");
+    } 
 
     return(
         <ProfileView>
@@ -38,7 +46,7 @@ export function ZDProfile(props){
                 }}
                 >
                     <MenuItem onClick={handleClose}>Settings</MenuItem>
-                    <MenuItem onClick={handleClose}>Log out</MenuItem>
+                    <MenuItem onClick={handleLogout}>Log out</MenuItem>
                 </Menu> 
         </ProfileView>
        

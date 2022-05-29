@@ -1,5 +1,6 @@
 import axios from "axios";
 import {GET_API} from "./ZDAPIUtils"
+import {getFoldersAndFiles} from "./ZDDataUtils"
 
 export const fetchFileNames = (callback) => {
   let parentId = localStorage.getItem("rootID")
@@ -12,7 +13,7 @@ export const fetchFileNames = (callback) => {
     "parentId": parentId
 }
   GET_API(url,params,(response)=>{
-    callback(response)
+    callback(getFoldersAndFiles(response.data))
   }, (error) => {
       console.log(error)
   })
@@ -148,3 +149,46 @@ export const updateFile = (filename, tags, objectId, success, failure) => {
       failure()
     });
 }
+
+export const createFolder = (folderName, success, failure) => {
+  let parentId = localStorage.getItem("rootID")
+  const formData = new FormData();
+            
+  if(localStorage.getItem("parentID") !== "null"){
+    parentId = localStorage.getItem("parentID")
+  }
+  const url = "/file-chunk/folder"
+  formData.append('Tags', "");
+  formData.append('parentId', parentId);
+  formData.append('fileName', folderName);
+
+  axios
+  .post(url, formData, {
+    headers: {
+      "Authorization": "Bearer " + localStorage.getItem("token")
+    }
+  })
+  .then((response) => {
+    success(response)
+  })
+  .catch((error) => {
+    console.log("fail")
+    failure()
+  });
+} 
+
+export const shareFile = (emailId, object, success, failure) =>{
+  const url = "/file-chunk/sharefile"
+  console.log(emailId, object)
+  const params = {
+    object_id: object.objectid,
+    email: emailId
+}
+  GET_API(url,params,(response)=>{
+    success(response)
+  }, (error) => {
+      console.log(error)
+      failure()
+  })
+}
+
