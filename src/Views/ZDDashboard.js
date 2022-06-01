@@ -5,9 +5,11 @@ import {MainView} from './styles';
 
 export const ZDDashboard = () => {
     const [data, setData] = useState(false)
+
     const handleUpdate = (result) => {
         setData(result)
     }
+
     return(
         <MainView>
             <ZDLeftMenu updatedData={handleUpdate}/>

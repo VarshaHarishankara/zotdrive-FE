@@ -1,13 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
-import Button from '@mui/material/Button';
+import {Button, Grid} from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import {shareFile} from '../Manager/ZDDataManager'
+import {shareFile, unshareFile} from '../Manager/ZDDataManager'
 import TextField from '@mui/material/TextField';
-import {FormDialog} from './styles';
+import {FormDialog,SharedPeopleView} from './styles';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -17,7 +18,7 @@ export const ZDShareDialog = (props) => {
     const fileInputRef = useRef();
     const [open, setOpen] = useState(false);
     const [emailId, setEmailId] = useState("");
-
+    const sharedList = props.item.userList
     useEffect(() => {
         setOpen(props.isOpen);
     },[props.isOpen])
@@ -48,10 +49,20 @@ export const ZDShareDialog = (props) => {
         setEmailId(event.target.value);
     }
 
+    const handleEmailClick = (email) => {
+        unshareFile(props.item, email, ()=>{
+            handleClose()
+            setEmailId("")
+            props.shouldFetchData()
+        },()=>{
+            alert("Error! Could not unshare")
+        })
+    }
+
     return (
         <div>
         <Dialog
-            sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
+            sx={{ '& .MuiDialog-paper': { width: '80%', height: '40%'} }}
             maxWidth="xs"
             open={open}
             TransitionComponent={Transition}
@@ -61,6 +72,20 @@ export const ZDShareDialog = (props) => {
         >
             <DialogTitle>{"Share with people"}</DialogTitle>
             <DialogContent>
+                <SharedPeopleView>
+                    {sharedList && sharedList.length > 0 &&  <Grid container spacing={1}>
+                        {
+                            sharedList.map((object) => {
+                                return(
+                                    <Button style={{marginRight: '10px', marginBottom: '10px'}}color="inherit" key={object.user.email} variant="contained" endIcon={<CancelIcon />} onClick={() => handleEmailClick(object.user.email)}>
+                                        {object.user.email}
+                                    </Button>
+                                )
+                            })
+
+                        }
+                    </Grid>}
+                </SharedPeopleView>
                 <FormDialog>
                     <TextField
                         label="Add people"

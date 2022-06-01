@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Typography from '@mui/material/Typography';
 import { ZDSearchBar } from './ZDSearchBar';
 import {ZDProfile} from './ZDProfile';
-import {ContentView,MainContentView, FilesAndDetailsView,FilesView}  from './styles';
+import {ContentView,MainContentView, FilesAndDetailsView,FilesView, PathItem, PathView}  from './styles';
 import {Button, Grid} from '@mui/material';
 import axios from 'axios';
 import {ZDFileItem} from '../components/ZDFileItem';
@@ -10,9 +10,9 @@ import { ZDRightContent } from './ZDRightContent';
 import { COLORS } from '../theme/colors';
 import {ZDFolderItem} from './ZDFolderItem';
 import {fetchFileNames} from '../Manager/ZDDataManager'
+import { addPath, getPath, popPath } from '../Manager/ZDDataUtils';
 
 export function ZDMainContent(props){
-    const [searchText, setSearchText] = useState('');
     const [selectedItem, setSelectedItem] = useState(null);
     const [files, setFiles] = useState([])
     const [folders, setFolders] = useState([])
@@ -54,10 +54,40 @@ export function ZDMainContent(props){
     }
 
     const handleDoubleClick = (folder) => {
-        localStorage.setItem("parentID",folder.objectid)
+        addPath(folder)
         fetchFileNames((response) =>{
             handleUpdateData(response)
         })
+    }
+
+    const handlePathClick = (obj, index) => {
+        popPath(index+1)
+        fetchFileNames((response) =>{
+            handleUpdateData(response)
+        })
+    }
+
+    const renderPath = () => {
+        const path = getPath()
+        if(path.length > 1){
+            return(
+                <PathView>
+                    {
+                        path && path.map((obj,index) => {
+                            return(
+                                <PathItem>
+                                    <Button variant="text" disabled={index == path.length -1} onClick={() => handlePathClick(obj, index)}>{obj.folder}</Button>
+                                    {index != path.length -1 && <Typography variant="h6" component="div">
+                                    {'>'}
+                                    </Typography>}    
+                                </PathItem>
+                            )
+                               
+                        })
+                    }
+                </PathView>
+            )
+        }
     }
 
     return(
@@ -85,8 +115,9 @@ export function ZDMainContent(props){
                         }
                     </Grid>
                     <Typography variant="h5" component="div" style={{marginTop:'30px', marginLeft: '10px'}}>
-                        {'Home Files'}
+                        {'Files'}
                     </Typography>  
+                    {renderPath()}
                     <Grid container spacing={3}>
                         {
                             files ? files.map((file, index) => {

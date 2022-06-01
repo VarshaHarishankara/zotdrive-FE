@@ -1,16 +1,12 @@
 import axios from "axios";
 import {GET_API} from "./ZDAPIUtils"
-import {getFoldersAndFiles} from "./ZDDataUtils"
+import {getFoldersAndFiles,getCurrentFolder} from "./ZDDataUtils"
 
 export const fetchFileNames = (callback) => {
-  let parentId = localStorage.getItem("rootID")
-            
-  if(localStorage.getItem("parentID") !== "null"){
-    parentId = localStorage.getItem("parentID")
-  }
   const url = "/file-chunk/files"
+  const parentId = getCurrentFolder()
   const params = {
-    "parentId": parentId
+    "parentId": parentId.id
 }
   GET_API(url,params,(response)=>{
     callback(getFoldersAndFiles(response.data))
@@ -59,16 +55,11 @@ export const loginUser = (object, callback) => {
 export const uploadFileToServer = (uploadFile, tags, callback) => {
     const formData = new FormData();
     const fileName = uploadFile[0].name
-    let parentId = localStorage.getItem("rootID")
-    
-    if(localStorage.getItem("parentID") !== "null"){
-        console.log("if")
-        parentId = localStorage.getItem("parentID")
-    }
+    const parentId = getCurrentFolder()
 
     formData.append('file', uploadFile[0]);
     formData.append('Tags', tags);
-    formData.append('parentId', parentId);
+    formData.append('parentId', parentId.id);
     formData.append('fileName', fileName);
     console.log(formData)
     let url = "/file-chunk/"+fileName
@@ -124,15 +115,11 @@ export const downloadFile = (fileId, success, failure) => {
 }
 
 export const updateFile = (filename, tags, objectId, success, failure) => {
-    let parentId = localStorage.getItem("rootID")
     const formData = new FormData();
-              
-    if(localStorage.getItem("parentID") !== "null"){
-      parentId = localStorage.getItem("parentID")
-    }
+    const parentId = getCurrentFolder()
     const url = "/file-chunk/updateFile/"+objectId
     formData.append('Tags', tags);
-    formData.append('parentId', parentId);
+    formData.append('parentId', parentId.id);
     formData.append('fileName', filename);
   
     axios
@@ -151,15 +138,11 @@ export const updateFile = (filename, tags, objectId, success, failure) => {
 }
 
 export const createFolder = (folderName, success, failure) => {
-  let parentId = localStorage.getItem("rootID")
   const formData = new FormData();
-            
-  if(localStorage.getItem("parentID") !== "null"){
-    parentId = localStorage.getItem("parentID")
-  }
+  const parentId = getCurrentFolder()
   const url = "/file-chunk/folder"
   formData.append('Tags', "");
-  formData.append('parentId', parentId);
+  formData.append('parentId', parentId.id);
   formData.append('fileName', folderName);
 
   axios
@@ -192,3 +175,70 @@ export const shareFile = (emailId, object, success, failure) =>{
   })
 }
 
+
+export const fetchSharedFiles = (keyword,success, failure) => {
+  const url = "/protected/api/search"
+
+  const params = {
+    "keyword": keyword,
+    "deleted": false
+  }
+ 
+  axios
+  .post(url, {
+    params: params
+  })
+  .then((response) => {
+    success(getFoldersAndFiles(response))
+  })
+  .catch((error) => {
+    console.log("fail")
+    failure()
+  });
+}
+
+export const unshareFile = (object, email, success, failure) => {
+  const url = "/file-chunk/unsharefile"
+  const params = {
+    object_id: object.objectid,
+    email: email
+  }
+  GET_API(url,params,(response)=>{
+    success(response)
+  }, (error) => {
+      console.log(error)
+      failure()
+  })
+}
+
+export const getAllSharedFiles = (success, failure) => {
+  const url = "/file-chunk/sharedfiles"
+  GET_API(url,{},(response)=>{
+    success(getFoldersAndFiles(response.data))
+  }, (error) => {
+      console.log(error)
+      failure()
+  })
+}
+
+export const getAllDeletedFiles = (success, failure) => {
+  const url = "/file-chunk/getDeletedFile"
+  GET_API(url,{},(response)=>{
+    success(getFoldersAndFiles(response.data))
+  }, (error) => {
+      console.log(error)
+      failure()
+  })
+}
+
+export const restoreFile = (object, success, failure) => {
+  const url = "/file-chunk/recoverFile"
+  const params={
+    object_id: object.objectid
+  }
+  GET_API(url,params,()=>{
+    success()
+  }, (error) => {
+      failure()
+  })
+}

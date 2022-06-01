@@ -8,7 +8,7 @@ export function  ZDListItem(props){
     <ItemView>
         <List>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={props.handleClick}>
               <ListItemIcon>
                 {icon}
               </ListItemIcon>

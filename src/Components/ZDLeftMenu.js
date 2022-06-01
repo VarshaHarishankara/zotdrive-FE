@@ -4,9 +4,10 @@ import {Menu,MenuItem} from '@mui/material';
 import { Storage,Bookmarks,Delete, FolderShared } from '@mui/icons-material';
 import { LeftContent ,LeftMenuView, OptionsContainer,StyledButton } from './styles';
 import { ZDListItem } from './ZDListItem';
-import {fetchFileNames, uploadFileToServer} from '../Manager/ZDDataManager'
+import {fetchFileNames, uploadFileToServer, getAllSharedFiles, getAllDeletedFiles} from '../Manager/ZDDataManager'
 import { ZDFileDialog } from './ZDFileDialog';
 import { ZDFolderDialog } from './ZDFolderDialog';
+import { deleteAllPath } from '../Manager/ZDDataUtils';
 
 
 export function ZDLeftMenu(props){
@@ -42,13 +43,33 @@ export function ZDLeftMenu(props){
         setOpenFolderDialog(true)
     }
 
+    const handleMyDrive = () => {
+        deleteAllPath()
+        fetchData()
+    }
+
+    const handleTrash = () => {
+        getAllDeletedFiles((result) => {
+            props.updatedData(result)
+        },()=>{
+            alert("Error! Could not retreive files")
+        })
+    }
+
+    const handleSharedFiles = () =>{
+        getAllSharedFiles((result) => {
+            props.updatedData(result)
+        },()=>{
+            alert("Error! Could not retreive files")
+        })
+    }
+
     const renderListItems= () => {
         return(
             <OptionsContainer>
-                <ZDListItem title={'My drive'} icon={<Storage/>}/>
-                <ZDListItem title={'Bookmark'} icon={<Bookmarks/>}/>
-                <ZDListItem title={'Shared Files'} icon={<FolderShared/>}/>
-                <ZDListItem title={'Trash'} icon={<Delete/>}/>
+                <ZDListItem title={'My drive'} icon={<Storage/>} handleClick={handleMyDrive}/>
+                <ZDListItem title={'Shared Files'} icon={<FolderShared/>} handleClick={handleSharedFiles}/>
+                <ZDListItem title={'Trash'} icon={<Delete/>} handleClick={handleTrash}/>
             </OptionsContainer>
         )
     }

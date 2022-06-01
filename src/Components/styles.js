@@ -181,7 +181,28 @@ export const FileOptionsView = styled.div`
   justify-content: space-between
 `;
 
+export const RestoreView = styled.div`
+  display: flex;
+  margin: 20px;
+  justify-content: center
+`;
+
 export const FormDialog = styled.form`
     display: flex;
     flex-direction: column;
+`;
+
+export const PathView = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const PathItem = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const SharedPeopleView = styled.div`
+    display: flex;
+    margin: 20px;
 `;

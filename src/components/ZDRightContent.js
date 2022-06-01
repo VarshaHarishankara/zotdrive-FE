@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Typography from '@mui/material/Typography';
-import {ClearView,DetailsView,DetailRowView,FileOptionsView,RightContentView,RightLabelView,RightContentDefaultView} from './styles';
+import {ClearView,DetailsView,DetailRowView,FileOptionsView,RightContentView,RightLabelView,RightContentDefaultView, RestoreView} from './styles';
 import ClearIcon from '@mui/icons-material/Clear';
 import {Button} from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -10,7 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
-import {deleteFile,downloadFile, fetchFileNames} from '../Manager/ZDDataManager'
+import {deleteFile,downloadFile, fetchFileNames, restoreFile} from '../Manager/ZDDataManager'
 import { ZDEditDialog } from './ZDEditDialog';
 import ShareIcon from '@mui/icons-material/Share';
 import { ZDShareDialog } from './ZDShareDialog';
@@ -81,6 +81,14 @@ export const ZDRightContent = (props) => {
         })
     }
 
+    const handleRestore = () => {
+        restoreFile(data, ()=> {
+            fetchData()
+        },()=>{
+            alert("Error! Could not restore")
+        })
+    }
+
     const fileDetails = () => {
         return(
             <DetailsView>
@@ -88,13 +96,13 @@ export const ZDRightContent = (props) => {
                     {detailsRow("Type", "#696969")}  
                     {data.type != null &&  detailsRow("Size", "#696969")}  
                     { data.type != null && detailsRow("Tags", "#696969")}    
-                    {detailsRow("Created", "#696969")}  
+                    {data.deleted ?  detailsRow("Deleted", "#696969") : detailsRow("Created", "#696969")}  
                 </RightLabelView>
                 <RightLabelView>
                     {detailsRow(data.type == null ? "Folder" : data.type)}     
                     {data.type != null && detailsRow(data.size)}     
-                    {data.type != null && detailsRow(data.tags)}    
-                    {detailsRow(data.createdOn)}  
+                    {data.type != null && detailsRow(data.tags ? data.tags : '-')}    
+                    {data.deleted ?  detailsRow(data.deletedAt) : detailsRow(data.createdOn)}  
                 </RightLabelView>  
             </DetailsView>
         )
@@ -109,6 +117,15 @@ export const ZDRightContent = (props) => {
             </DetailRowView>
         )
     }
+
+    const restoreFileView = () => {
+        return (
+            <RestoreView>
+                <Button variant="outlined" color="inherit" onClick={handleRestore}>{"Restore"}</Button>
+            </RestoreView>
+        )
+    }
+
     const fileOptionsView = () => {
         return(
             <FileOptionsView>
@@ -186,7 +203,7 @@ export const ZDRightContent = (props) => {
                     {data ? data.name : ""}
             </Typography> 
             {fileDetails()}
-            {fileOptionsView()}
+            {data.deleted ? restoreFileView() : fileOptionsView()}
             {renderEditDialog()}
             {renderShareDialog()}
         </RightContentView>
