@@ -7,7 +7,7 @@ export const ZDFolderItem = (props) => {
     return(
         <FileIconView>
             <FileInitialView>
-                <FolderIcon style={{fontSize: "87px"}}/>          
+                <FolderIcon style={{fontSize: "87px", color: '#929292', display: 'flex', justifyContent: 'flex-start', marginLeft: '10px'}}/>          
             </FileInitialView>
             <FileNameView>
                 <Typography noWrap variant="h7" component="div" style={{marginLeft: "20px"}}>

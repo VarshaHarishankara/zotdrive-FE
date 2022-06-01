@@ -19,6 +19,13 @@ height: 10%;
 border-bottom: 1px solid ${props => props.borderColor};
 `;
 
+export const DropDownView = styled.div`
+display: flex;
+margin-left: 30px;  
+margin-top: 20px;
+margin-right: 20px;
+`;
+
 export const ContentView = styled.div`
 display: flex;
 width: 100%;
@@ -35,7 +42,7 @@ flex-direction: flex-start;
 
 export const SearchView =  styled.div`
 width: 70%;
-margin-top:20px;
+margin: 20px
 `;
 
 export const StyledButton = styled(Button)`
@@ -82,9 +89,9 @@ export const ProfileView = styled.div`
 
 export const FilesView = styled.div`
   margin-left: 30px;
-  border-right: 1px solid ${props => props.borderColor};
   padding-right: 50px;
   flex: 1;
+  border-right: 1px solid ${props => props.borderColor};
 `;
 
 export const FileItem = styled.div`
@@ -104,7 +111,7 @@ export const FileInitialView = styled.div`
     border-bottom: 2px solid #808080;
     &:hover {
       border-color: #1F51FF;
-    }
+    };
 `;
 
 export const FileNameView = styled.div`
@@ -114,6 +121,8 @@ export const FileNameView = styled.div`
   align-items: center;
   background-color: ${props => props.selectedColor};
   border-radius: 3px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 `;
 
 export const InitialContainer = styled.div`
@@ -178,7 +187,7 @@ export const FileOptionsView = styled.div`
   display: flex;
   flex-direction: row;
   margin: 20px;
-  justify-content: space-between
+  justify-content: center
 `;
 
 export const RestoreView = styled.div`
@@ -195,6 +204,7 @@ export const FormDialog = styled.form`
 export const PathView = styled.div`
     display: flex;
     flex-direction: row;
+    margin-top: 30px
 `;
 
 export const PathItem = styled.div`

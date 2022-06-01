@@ -1,7 +1,7 @@
 import React from 'react';
 import {FileIconView, FileInitialView, FileNameView, InitialContainer} from './styles'
-import ArticleIcon from '@mui/icons-material/Article';
 import Typography from '@mui/material/Typography';
+import { ZDFileTypeIcon } from './ZDFileTypeIcon';
 
 export const ZDFileItem = (props) => {
     return(
@@ -14,8 +14,8 @@ export const ZDFileItem = (props) => {
                 </InitialContainer>                
             </FileInitialView>
             <FileNameView>
-                <ArticleIcon style={{margin: '10px'}}/>
-                <Typography noWrap variant="h7" component="div">
+                <ZDFileTypeIcon fileType={props.fileType} iconWidth={'20px'} iconHeight={'20px'} isSmall={true}/>
+                <Typography noWrap variant="h7" component="div" sx={{marginLeft: '8px'}}>
                     {props.fileName}
                 </Typography>    
             </FileNameView>

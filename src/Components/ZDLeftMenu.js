@@ -20,6 +20,20 @@ export function ZDLeftMenu(props){
         fetchData()
     },[])
 
+    useEffect(() => {
+        handleNavigationCalls()
+    },[props.handleNavigation])
+
+    const handleNavigationCalls = () => {
+        if(props.handleNavigation == 10){
+            handleMyDrive()
+        }else if(props.handleNavigation == 20){
+            handleSharedFiles()
+        }else{
+            handleTrash()
+        }
+    }
+
     const fetchData = () => {
         fetchFileNames((result) => {
             props.updatedData(result)
@@ -46,9 +60,11 @@ export function ZDLeftMenu(props){
     const handleMyDrive = () => {
         deleteAllPath()
         fetchData()
+        props.updateLocation(10)
     }
 
     const handleTrash = () => {
+        props.updateLocation(30)
         getAllDeletedFiles((result) => {
             props.updatedData(result)
         },()=>{
@@ -57,11 +73,16 @@ export function ZDLeftMenu(props){
     }
 
     const handleSharedFiles = () =>{
+        props.updateLocation(20)
         getAllSharedFiles((result) => {
             props.updatedData(result)
         },()=>{
             alert("Error! Could not retreive files")
         })
+    }
+
+    const handleNavigation = () => {
+
     }
 
     const renderListItems= () => {

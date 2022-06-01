@@ -1,19 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import Typography from '@mui/material/Typography';
-import {ClearView,DetailsView,DetailRowView,FileOptionsView,RightContentView,RightLabelView,RightContentDefaultView, RestoreView} from './styles';
-import ClearIcon from '@mui/icons-material/Clear';
-import {Button} from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import {Menu,MenuItem} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import DownloadIcon from '@mui/icons-material/Download';
-import EditIcon from '@mui/icons-material/Edit';
+import {ClearView,DetailsView,DetailRowView,FileOptionsView,RightContentView,RightLabelView,RightContentDefaultView, RestoreView, FileIconView} from './styles';
+import {Button, ListItemText, ListItemIcon, Menu,MenuItem, Typography} from '@mui/material';
+import {Clear, Delete, Download, Edit, Folder, MoreHoriz, Share} from '@mui/icons-material';
 import {deleteFile,downloadFile, fetchFileNames, restoreFile} from '../Manager/ZDDataManager'
 import { ZDEditDialog } from './ZDEditDialog';
-import ShareIcon from '@mui/icons-material/Share';
 import { ZDShareDialog } from './ZDShareDialog';
+import files from '../assets/files.png'
+import { ZDFileTypeIcon } from './ZDFileTypeIcon';
 
 export const ZDRightContent = (props) => {
     const [data, setData] = useState(null)
@@ -35,9 +28,7 @@ export const ZDRightContent = (props) => {
     const handleDownloadClose = () => {
         setAnchorEl(null);
         downloadFile(data.objectid,(response)=>{
-            console.log(response)
-            const blob = new Blob([response.data],{type: "octet/stream"})
-            console.log(blob)
+            const blob = new Blob([response.data],{type: response.headers["content-type"]})
             const filename =  response.headers['content-disposition'].split('filename=')[1]
             const url = window.URL.createObjectURL(blob); 
             const a = document.createElement('a');
@@ -100,12 +91,24 @@ export const ZDRightContent = (props) => {
                 </RightLabelView>
                 <RightLabelView>
                     {detailsRow(data.type == null ? "Folder" : data.type)}     
-                    {data.type != null && detailsRow(data.size)}     
+                    {data.type != null && detailsRow(formatBytes(data.size))}     
                     {data.type != null && detailsRow(data.tags ? data.tags : '-')}    
                     {data.deleted ?  detailsRow(data.deletedAt) : detailsRow(data.createdOn)}  
                 </RightLabelView>  
             </DetailsView>
         )
+    }
+
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+    
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
 
     const detailsRow = (text, textColor) => {
@@ -129,14 +132,14 @@ export const ZDRightContent = (props) => {
     const fileOptionsView = () => {
         return(
             <FileOptionsView>
-                <Button variant="outlined" color="inherit">{data.folder ? "Open Folder" : "Open File"}</Button>
+                {/* <Button variant="outlined" color="inherit">{data.folder ? "Open Folder" : "Open File"}</Button> */}
                 <Button 
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 variant="outlined"  
                 color="inherit" 
-                startIcon={<MoreHorizIcon/>}
+                startIcon={<MoreHoriz/>}
                 onClick={handleMoreOptions}
                 ></Button>
                  <Menu
@@ -150,25 +153,25 @@ export const ZDRightContent = (props) => {
                 >
                     <MenuItem onClick={handleEditClose}>
                         <ListItemIcon>
-                            <EditIcon fontSize="small" />
+                            <Edit fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Edit</ListItemText>              
                     </MenuItem>
                     <MenuItem onClick={handleShareClose}>
                         <ListItemIcon>
-                            <ShareIcon fontSize="small" />
+                            <Share fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Share</ListItemText>              
                     </MenuItem>
                     <MenuItem onClick={handleDeleteClose}>
                         <ListItemIcon>
-                            <DeleteIcon fontSize="small" />
+                            <Delete fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Delete</ListItemText>              
                     </MenuItem>
                     {!data.folder && <MenuItem onClick={handleDownloadClose}>
                         <ListItemIcon>
-                            <DownloadIcon fontSize="small" />
+                            <Download fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Download</ListItemText>              
                     </MenuItem>}
@@ -193,15 +196,26 @@ export const ZDRightContent = (props) => {
         setData(null)
     }
 
+    const renderFileIcon = () => {
+        
+        const icon = data.folder ? 
+                <Folder style={{fontSize: "120px", color: '#929292',marginLeft: '20px'}}/>  : 
+                <ZDFileTypeIcon fileType={data.type} iconWidth={'80px'} iconHeight={'100px'}/>
+            
+        return icon
+        
+    }
+
     return(
         data ? 
         <RightContentView>
             <ClearView>
-                 <Button color="inherit" onClick={handleClearClick}><ClearIcon style={{marginRight: '10px'}}/></Button>
+                 <Button color="inherit" onClick={handleClearClick}><Clear style={{marginRight: '10px'}}/></Button>
             </ClearView>
             <Typography variant="h5" component="div" style={{wordBreak: 'break-word', margin: '20px'}}>
                     {data ? data.name : ""}
             </Typography> 
+            {renderFileIcon()}
             {fileDetails()}
             {data.deleted ? restoreFileView() : fileOptionsView()}
             {renderEditDialog()}
@@ -209,6 +223,7 @@ export const ZDRightContent = (props) => {
         </RightContentView>
         :
         <RightContentDefaultView>
+            <img src={files} width="100" height="100"/>
             <Typography variant="h5" component="div" color={'#696969'} style={{wordBreak: 'break-word', margin: '20px'}}>
                 {"Select file or folder to see details"}
             </Typography> 

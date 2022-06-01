@@ -4,7 +4,9 @@ import { ZDMainContent } from '../components/ZDMainContent';
 import {MainView} from './styles';
 
 export const ZDDashboard = () => {
-    const [data, setData] = useState(false)
+    const [data, setData] = useState([])
+    const [location, setLocation] = useState(10)
+    const [option, setOption] = useState(10)
 
     const handleUpdate = (result) => {
         setData(result)
@@ -12,8 +14,8 @@ export const ZDDashboard = () => {
 
     return(
         <MainView>
-            <ZDLeftMenu updatedData={handleUpdate}/>
-            <ZDMainContent results={data}/>
+            <ZDLeftMenu updatedData={handleUpdate} updateLocation={(value) => setLocation(value)} handleNavigation={option}/>
+            <ZDMainContent results={data} option={location} navigateLocation={(value) => setOption(value)}/>
         </MainView>
     )
 }

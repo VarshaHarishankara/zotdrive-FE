@@ -102,9 +102,10 @@ export const downloadFile = (fileId, success, failure) => {
         "uuid" : fileId
       },
       headers:{
-        "Authorization": "Bearer " + localStorage.getItem("token")
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+        'Content-Type': 'application/json'
       } 
-    },{responseType: 'blob'})
+    })
     .then((response) => {
         success(response)
     })
@@ -241,4 +242,25 @@ export const restoreFile = (object, success, failure) => {
   }, (error) => {
       failure()
   })
+}
+
+export const fetchFilesWithText = (query, deleted, success, failure) => {
+  const url = "/protected/api/search"
+  const body = {
+    "keyword" : query,
+    "deleted": deleted
+  }
+  axios
+  .post(url, body, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("token")
+    }
+  })
+  .then((response) => {
+      success(getFoldersAndFiles(response.data))
+  })
+  .catch((error) => {
+    failure()
+  });
 }

@@ -1,32 +1,38 @@
 import React, {useState, useEffect} from 'react';
-import Box from '@mui/material/Box';
-import Search from '@mui/icons-material/Search';
-import { MainView, SearchView, WhiteBorderTextField } from './styles';
+import { MainView, SearchView } from './styles';
+import SearchBar from 'material-ui-search-bar'
+import {fetchFilesWithText, fetchFileNames} from '../Manager/ZDDataManager'
 
-export function ZDSearchBar(){
+export function ZDSearchBar(props){
     const [searchText, setSearchText] = useState("")
 
-    const handleSearchTextChange = (event) => {
-        setSearchText(event.target.value)
+
+    const handleRequestSearch = () => {
+        fetchFilesWithText(searchText,false,(result)=>{
+            console.log(result)
+            props.updatedData(result)
+        },()=>{
+            alert("Error! Could not fetch files")
+        })
     }
 
-    useEffect(() => {
-        
-    },[searchText])
+    const handleCancelSearch = () => {
+        fetchFileNames((result) => {
+            props.updatedData(result)
+        })
+    }
 
     return(
         <MainView>
             <SearchView>
-            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                <Search sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                <WhiteBorderTextField 
-                value={searchText}
-                onChange={handleSearchTextChange}
-                id="input-with-sx" 
-                fullWidth 
-                label="Search file or folder" 
-                variant="standard" />
-            </Box>
+                <SearchBar
+                    value={searchText}
+                    onChange={(text) => setSearchText(text)}
+                    onRequestSearch={handleRequestSearch}
+                    cancelOnEscape={true}
+                    style={{width: '800px'}}
+                    onCancelSearch={handleCancelSearch}
+                />
             </SearchView>
         </MainView>
     )
