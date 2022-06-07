@@ -46,5 +46,6 @@ export const getFoldersAndFiles = (data) => {
 
 export const getSharedWithList = (user) => {
     let users = []
-    
+
+    user.push(user.cre)
 }

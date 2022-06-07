@@ -104,7 +104,8 @@ export const downloadFile = (fileId, success, failure) => {
       headers:{
         "Authorization": "Bearer " + localStorage.getItem("token"),
         'Content-Type': 'application/json'
-      } 
+      },
+      responseType: 'blob' 
     })
     .then((response) => {
         success(response)
@@ -113,6 +114,27 @@ export const downloadFile = (fileId, success, failure) => {
       console.log("fail")
       failure(error)
     })
+}
+
+export const openFile = (fileId, success, failure) => {
+  axios
+  .get("/file-chunk/openDownloadFile",{
+    params:{
+      "uuid" : fileId
+    },
+    headers:{
+      "Authorization": "Bearer " + localStorage.getItem("token"),
+      'Content-Type': 'application/json'
+    },
+    responseType: 'blob' 
+  })
+  .then((response) => {
+      success(response)
+  })
+  .catch((error) => {
+    console.log("fail")
+    failure(error)
+  })
 }
 
 export const updateFile = (filename, tags, objectId, success, failure) => {

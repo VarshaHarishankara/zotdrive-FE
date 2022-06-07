@@ -130,10 +130,7 @@ export const InitialContainer = styled.div`
   margin: 10px;
   align-items: center;
   justify-content: center;
-  background: #470F9E;
-  background: -webkit-linear-gradient(top left, #470F9E, #8A02CE);
-  background: -moz-linear-gradient(top left, #470F9E, #8A02CE);
-  background: linear-gradient(to bottom right, #470F9E, #8A02CE); 
+  background: #4F83E7;
 `;
 
 export const FilesAndDetailsView = styled.div`
@@ -187,7 +184,7 @@ export const FileOptionsView = styled.div`
   display: flex;
   flex-direction: row;
   margin: 20px;
-  justify-content: center
+  justify-content: space-between
 `;
 
 export const RestoreView = styled.div`

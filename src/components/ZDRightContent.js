@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {ClearView,DetailsView,DetailRowView,FileOptionsView,RightContentView,RightLabelView,RightContentDefaultView, RestoreView, FileIconView} from './styles';
 import {Button, ListItemText, ListItemIcon, Menu,MenuItem, Typography} from '@mui/material';
 import {Clear, Delete, Download, Edit, Folder, MoreHoriz, Share, Info} from '@mui/icons-material';
-import {deleteFile,downloadFile, fetchFileNames, restoreFile} from '../Manager/ZDDataManager'
+import {deleteFile,downloadFile, openFile, fetchFileNames, restoreFile} from '../Manager/ZDDataManager'
 import { ZDEditDialog } from './ZDEditDialog';
 import { ZDShareDialog } from './ZDShareDialog';
 import files from '../assets/files.png'
@@ -30,7 +30,7 @@ export const ZDRightContent = (props) => {
     const handleDownloadClose = () => {
         setAnchorEl(null);
         downloadFile(data.objectid,(response)=>{
-            const blob = new Blob([response.data],{type: response.headers["content-type"]})
+            const blob = new Blob([response.data])
             const filename =  response.headers['content-disposition'].split('filename=')[1].replace(/['"]+/g, '')
             const url = window.URL.createObjectURL(blob); 
             const a = document.createElement('a');
@@ -39,6 +39,27 @@ export const ZDRightContent = (props) => {
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
+            
+        },()=>{
+            alert("Error! Unable to download")
+        })
+    };
+
+    const handleOpenFile = (data) => {
+        setAnchorEl(null);
+        openFile(data.objectid,(response)=>{
+            let blobType = ""
+            if(data.type == "PNG" || data.type == "JPG" || data.type == "JPEG"){
+                blobType = "image/*"
+            }else{
+                blobType = "application/pdf"
+            }
+            const blob = new Blob([response.data], { type: blobType })
+            const filename =  response.headers['content-disposition'].split('filename=')[1].replace(/['"]+/g, '')
+            const url = window.URL.createObjectURL(blob); 
+            const pdfWindow = window.open();
+            pdfWindow.location.href = url;   
+           
         },()=>{
             alert("Error! Unable to download")
         })
@@ -140,7 +161,7 @@ export const ZDRightContent = (props) => {
     const fileOptionsView = () => {
         return(
             <FileOptionsView>
-                {/* <Button variant="outlined" color="inherit">{data.folder ? "Open Folder" : "Open File"}</Button> */}
+                <Button variant="outlined" color="inherit" onClick={() => handleOpenFile(data)}>{data.folder ? "Open Folder" : "Open File"}</Button>
                 <Button 
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
@@ -184,7 +205,7 @@ export const ZDRightContent = (props) => {
                         </ListItemIcon>
                         <ListItemText>Delete</ListItemText>              
                     </MenuItem>
-                    {!data.folder && <MenuItem onClick={handleDownloadClose}>
+                    {!data.folder && <MenuItem onClick={() => handleDownloadClose()}>
                         <ListItemIcon>
                             <Download fontSize="small" />
                         </ListItemIcon>
