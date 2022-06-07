@@ -7,10 +7,10 @@ export const MainView = styled.div`
 `;
 
 export const OuterView = styled.div`
-    background: #470F9E;
-    background: -webkit-linear-gradient(top left, #470F9E, #8A02CE);
-    background: -moz-linear-gradient(top left, #470F9E, #8A02CE);
-    background: linear-gradient(to bottom right, #470F9E, #8A02CE);  
+    background: #F0F2F5;
+    background: -webkit-linear-gradient(top left, #F0F2F5, #F0F2F5);
+    background: -moz-linear-gradient(top left, #F0F2F5, #F0F2F5);
+    background: linear-gradient(to bottom right, #F0F2F5, #F0F2F5);  
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,12 +31,13 @@ export const HomeView = styled.div`
 
 export const FormView = styled.div`
     width: 350px;
-    margin: auto;
     background: #ffffff;
     box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
     padding: 40px 55px 45px 55px;
     border-radius: 15px;
     transition: all .3s;
+    display: flex;
+    flex-direction: column 
 `;
 
 export const ForgotPassword = styled.p`
@@ -54,14 +55,23 @@ export const Title = styled.h3`
     padding-bottom: 20px;
 `;
 
-export const RegisterBtn = styled.button`
-    background-color: black;
+export const LoginBtn = styled.button`
+    background-color: #4F83E7;
     color: white;
     font-size: 15px;
     padding: 10px 60px;
     border-radius: 5px;
     margin: 10px 0px;
-    cursor: pointer;
+`;
+
+export const RegisterBtn = styled.button`
+    background-color: #65B561;
+    color: white;
+    font-size: 15px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    margin: 10px 0px;
+    align-self: 'center'
 `;
 
 export const Form = styled.form`
@@ -69,6 +79,8 @@ export const Form = styled.form`
     justify-content: space-between; 
     flex-direction: column;
     align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #808080;
 `;
 
 export const FormGroup = styled.div`
@@ -103,4 +115,18 @@ export const ContextView = styled.div`
     align-items: flex-end;
     margin-right: 100px;
     margin-bottom: 50px;
+`;
+
+export const LoginView = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: space-between;
+    margin-left: 300px;
+    margin-right: 200px;
+`;
+
+export const TextView = styled.div`
+    display: flex;
+    flex-direction: column;
 `;

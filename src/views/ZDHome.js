@@ -11,11 +11,7 @@ export const ZDHome = () => {
     return(
       <HomeView style={{backgroundImage: `url(${background})`, height: styleHeight}}>
         <ZDNavBar/>
-        {/* <ContextView>
-          <Typography variant="h3" color="#ffffff">
-              Manage your files efficiently
-          </Typography>   
-        </ContextView> */}
+        
       </HomeView>
     )
 }

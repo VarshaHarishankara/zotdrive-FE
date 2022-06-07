@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<ZDHome/>}/>
+            <Route path="/" element={<ZDLogin/>}/>
             <Route path="/dashboard" element={<ZDDashboard/>}/>
             <Route path="/signup" element={<ZDSignUp/>} />
             <Route path="/login" element={<ZDLogin/>} />

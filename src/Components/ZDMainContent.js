@@ -25,7 +25,7 @@ export function ZDMainContent(props){
     const [folders, setFolders] = useState([])
     const username = localStorage.getItem("emailId");
     const [dropDownOption, setDropDownOption] = useState(10)
-    const [isListview, setIsListView] = useState(true)
+    const [isListview, setIsListView] = useState(false)
 
     useEffect(() => {
         setFiles(props.results.files)
@@ -94,7 +94,7 @@ export function ZDMainContent(props){
                     return (
                     <Grid item xs={6} sm={3} key={index}>
                         <Button color="inherit" onClick={() => handleOnClick(file)}>
-                            {!file.folder && <ZDFileItem selected={selectedItem != null ? '#ADD8E6' : 'transparent'} fileName={file.name} fileType={file.type}/>}
+                            {!file.folder && <ZDFileItem selectedObj={selectedItem} item={file}/>}
                         </Button>
                     </Grid>
                 )})

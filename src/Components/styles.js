@@ -46,16 +46,16 @@ margin: 20px
 `;
 
 export const StyledButton = styled(Button)`
-  background: #470F9E;
-  background: -webkit-linear-gradient(top left, #470F9E, #8A02CE);
-  background: -moz-linear-gradient(top left, #470F9E, #8A02CE);
-  background: linear-gradient(to bottom right, #470F9E, #8A02CE); 
+  background: #4F83E7;
+  background: -webkit-linear-gradient(top left, #4F83E7, #4F83E7);
+  background: -moz-linear-gradient(top left, #4F83E7, #4F83E7);
+  background: linear-gradient(to bottom right, #4F83E7, #4F83E7); 
   border-radius: 3px;
   border: 0;
   height: 50px;
   width: 200px;
   padding: 0 30px;
-  box-shadow: 0 3px 5px 2px rgba(255, 105, 135, .3);
+  box-shadow: 0 3px 5px 2px rgba(169, 169, 169, .3);
 `;
 
 export const ItemView = styled.div`

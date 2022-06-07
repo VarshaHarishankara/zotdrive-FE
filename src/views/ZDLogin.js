@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {ForgotPassword, Form, FormGroup, FormView, InputField, OuterView, Title, RegisterBtn} from './styles';
+import {Form, FormGroup, FormView, LoginView, InputField, LoginBtn, OuterView, Title,TextView, RegisterBtn} from './styles';
 import {useWindowDimensions} from '../Manager/ZDDimensions'
 import { loginUser } from "../Manager/ZDDataManager";
 import { useNavigate } from "react-router-dom";
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 export const ZDLogin = () => {
     const { height, width } = useWindowDimensions();
@@ -52,26 +54,71 @@ export const ZDLogin = () => {
         navigate("/dashboard")
     } 
 
+    const handleRegistration = () => {
+        navigate("/signup")
+    }
+
+    const theme = createTheme();
+
+    theme.typography.h2 = {
+    fontSize: '1.2rem',
+    '@media (min-width:600px)': {
+        fontSize: '5.0rem',
+        fontFamily: 'Roboto'
+    },
+    [theme.breakpoints.up('md')]: {
+        fontSize: '5.0rem',
+        fontFamily: 'Roboto'
+    },
+    };
+
+    theme.typography.h4 = {
+        fontSize: '1.2rem',
+        '@media (min-width:600px)': {
+            fontSize: '2.0rem',
+            fontFamily: 'Roboto',
+            fontStyle: 'italic',
+        },
+        [theme.breakpoints.up('md')]: {
+            fontSize: '2.0rem',
+            fontFamily: 'Roboto',
+            fontStyle: 'italic',
+        },
+        };
+
     return(
         <OuterView style={{height: styleHeight}}>
-        <FormView>
-            <Form onSubmit={handleSubmit}>
-                <Title>Sign in</Title>
+            <LoginView>
+                <TextView>
+                    <ThemeProvider theme={theme}>
+                        <Typography noWrap variant="h2" component="div" sx={{color: '#4F83E7'}}>
+                            {"Zotdrive"}
+                        </Typography> 
+                        <Typography noWrap variant="h4" component="div" sx={{color: 'black'}}>
+                            {"One place for all your files"}
+                        </Typography> 
+                    </ThemeProvider>
+                </TextView>
+                <FormView>
+                    <Form onSubmit={handleSubmit}>
+                        <Title>Sign in</Title>
 
-                    <FormGroup>
-                        <label>Email</label>
-                        <InputField type="email" value={email} placeholder="Enter email" onChange={handleEmaiChange}/>
-                    </FormGroup>
+                            <FormGroup>
+                                <label>Email</label>
+                                <InputField type="email" value={email} placeholder="Enter email" onChange={handleEmaiChange}/>
+                            </FormGroup>
 
-                    <FormGroup>
-                        <label>Password</label>
-                        <InputField type="password" value={password}  placeholder="Enter password" onChange={handlePasswordChange}/>
-                    </FormGroup>
+                            <FormGroup>
+                                <label>Password</label>
+                                <InputField type="password" value={password}  placeholder="Enter password" onChange={handlePasswordChange}/>
+                            </FormGroup>
 
-                <RegisterBtn type="submit">Sign in</RegisterBtn>
-            </Form>
-
-        </FormView>
+                        <LoginBtn type="submit">Sign in</LoginBtn>
+                    </Form>
+                    <RegisterBtn onClick={handleRegistration}>Create account</RegisterBtn>
+                </FormView>
+            </LoginView>
+       
         
     </OuterView>  
     )

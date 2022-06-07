@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {ForgotPassword, Form, FormGroup, FormView, InputField, OuterView, Title, RegisterBtn} from './styles';
+import {ForgotPassword, Form, FormGroup, FormView, InputField, OuterView, Title, LoginBtn} from './styles';
 import {useWindowDimensions} from '../Manager/ZDDimensions'
 import { createUser } from "../Manager/ZDDataManager";
 import { Link, useNavigate } from "react-router-dom";
@@ -82,7 +82,7 @@ export const ZDSignUp = () => {
                         <InputField type="password" value={password} placeholder="Enter password" onChange={handlePasswordChange}/>
                     </FormGroup>
 
-                    <RegisterBtn type="submit">Register</RegisterBtn>
+                    <LoginBtn type="submit">Register</LoginBtn>
                     <ForgotPassword>
                         Already registered <Link to="/login">log in?</Link>
                     </ForgotPassword>
