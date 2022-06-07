@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {ClearView,DetailsView,DetailRowView,FileOptionsView,RightContentView,RightLabelView,RightContentDefaultView, RestoreView, FileIconView} from './styles';
 import {Button, ListItemText, ListItemIcon, Menu,MenuItem, Typography} from '@mui/material';
-import {Clear, Delete, Download, Edit, Folder, MoreHoriz, Share} from '@mui/icons-material';
+import {Clear, Delete, Download, Edit, Folder, MoreHoriz, Share, Info} from '@mui/icons-material';
 import {deleteFile,downloadFile, fetchFileNames, restoreFile} from '../Manager/ZDDataManager'
 import { ZDEditDialog } from './ZDEditDialog';
 import { ZDShareDialog } from './ZDShareDialog';
 import files from '../assets/files.png'
 import { ZDFileTypeIcon } from './ZDFileTypeIcon';
+import { ZDSharedDetailsDialog } from './ZDSharedDetailsDialog';
 
 export const ZDRightContent = (props) => {
     const [data, setData] = useState(null)
@@ -14,6 +15,7 @@ export const ZDRightContent = (props) => {
     const open = Boolean(anchorEl);
     const [editDialogOpen, setEditDialogOpen] = useState(false)
     const [shareDialogOpen, setShareDialogOpen] = useState(false)
+    const [sharedWithDialogOpen, setSharedWithDialogOpen] = useState(false)
     
     useEffect(() => {
         setData(props.item) 
@@ -29,7 +31,7 @@ export const ZDRightContent = (props) => {
         setAnchorEl(null);
         downloadFile(data.objectid,(response)=>{
             const blob = new Blob([response.data],{type: response.headers["content-type"]})
-            const filename =  response.headers['content-disposition'].split('filename=')[1]
+            const filename =  response.headers['content-disposition'].split('filename=')[1].replace(/['"]+/g, '')
             const url = window.URL.createObjectURL(blob); 
             const a = document.createElement('a');
             a.href = url;
@@ -56,6 +58,11 @@ export const ZDRightContent = (props) => {
         setShareDialogOpen(true)
     }
 
+    const handleMoreDetailsClose = () => {
+        handleClose()
+        setSharedWithDialogOpen(true)
+    }
+
     const handleDeleteClose = () => {
         setAnchorEl(null);
         deleteFile(data.objectid,(response) => {
@@ -74,6 +81,7 @@ export const ZDRightContent = (props) => {
 
     const handleRestore = () => {
         restoreFile(data, ()=> {
+            props.updateOption()
             fetchData()
         },()=>{
             alert("Error! Could not restore")
@@ -157,12 +165,19 @@ export const ZDRightContent = (props) => {
                         </ListItemIcon>
                         <ListItemText>Edit</ListItemText>              
                     </MenuItem>
-                    <MenuItem onClick={handleShareClose}>
+                    {!props.isSharedTab ? <MenuItem onClick={handleShareClose}>
                         <ListItemIcon>
                             <Share fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Share</ListItemText>              
-                    </MenuItem>
+                    </MenuItem> : 
+                         <MenuItem onClick={handleMoreDetailsClose}>
+                         <ListItemIcon>
+                             <Info fontSize="small" />
+                         </ListItemIcon>
+                         <ListItemText>More Details</ListItemText>              
+                     </MenuItem>
+                    }
                     <MenuItem onClick={handleDeleteClose}>
                         <ListItemIcon>
                             <Delete fontSize="small" />
@@ -189,6 +204,12 @@ export const ZDRightContent = (props) => {
     const renderShareDialog = () => {
         return(
             <ZDShareDialog isOpen={shareDialogOpen} item={data} shouldFetchData={handleUpdateData} handleShareDialogClose={() => setShareDialogOpen(false)}/>
+        )
+    }
+
+    const renderSharedWithDialog = () => {
+        return(
+            <ZDSharedDetailsDialog isOpen={sharedWithDialogOpen} item={data} handleShareDialogClose={() => setSharedWithDialogOpen(false)}/>
         )
     }
 
@@ -220,6 +241,7 @@ export const ZDRightContent = (props) => {
             {data.deleted ? restoreFileView() : fileOptionsView()}
             {renderEditDialog()}
             {renderShareDialog()}
+            {renderSharedWithDialog()}
         </RightContentView>
         :
         <RightContentDefaultView>

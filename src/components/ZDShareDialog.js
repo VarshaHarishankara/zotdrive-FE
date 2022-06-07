@@ -15,7 +15,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export const ZDShareDialog = (props) => {
-    const fileInputRef = useRef();
     const [open, setOpen] = useState(false);
     const [emailId, setEmailId] = useState("");
     const sharedList = props.item.userList

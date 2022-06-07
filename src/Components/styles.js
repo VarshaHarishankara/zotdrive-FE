@@ -216,3 +216,23 @@ export const SharedPeopleView = styled.div`
     display: flex;
     margin: 20px;
 `;
+
+export const DisplayOptionsView = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top:30px;
+  margin-left: 10px;
+  align-items: center
+`;
+
+export const GridListOptions = styled.div`
+display: flex;
+flex-direction: row;
+margin-left: auto;
+`;
+
+export const NoFileView = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

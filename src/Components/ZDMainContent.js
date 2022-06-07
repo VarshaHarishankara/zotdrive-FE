@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import Typography from '@mui/material/Typography';
 import { ZDSearchBar } from './ZDSearchBar';
 import {ZDProfile} from './ZDProfile';
-import {ContentView,DropDownView, MainContentView, FilesAndDetailsView,FilesView, PathItem, PathView}  from './styles';
-import {Button, Grid} from '@mui/material';
+import {ContentView,DisplayOptionsView, DropDownView, GridListOptions, MainContentView, NoFileView, FilesAndDetailsView,FilesView, PathItem, PathView}  from './styles';
+import {Button, Grid, IconButton} from '@mui/material';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import {ZDFileItem} from '../components/ZDFileItem';
@@ -13,6 +13,11 @@ import {ZDFolderItem} from './ZDFolderItem';
 import {fetchFileNames} from '../Manager/ZDDataManager'
 import { addPath, getPath, popPath } from '../Manager/ZDDataUtils';
 import MenuItem from '@mui/material/MenuItem';
+import { ListGroup } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+import { ZDFileTypeIcon } from './ZDFileTypeIcon';
+import {FormatListBulleted, GridView} from '@mui/icons-material';
+import NoFilesIcon from '../assets/NoFilesIcon.jpeg'
 
 export function ZDMainContent(props){
     const [selectedItem, setSelectedItem] = useState(null);
@@ -20,6 +25,7 @@ export function ZDMainContent(props){
     const [folders, setFolders] = useState([])
     const username = localStorage.getItem("emailId");
     const [dropDownOption, setDropDownOption] = useState(10)
+    const [isListview, setIsListView] = useState(true)
 
     useEffect(() => {
         setFiles(props.results.files)
@@ -80,6 +86,78 @@ export function ZDMainContent(props){
         }
     }
 
+    const renderFilesIconView = () =>{
+        const data = 
+        files && files.length > 0 ? <Grid container spacing={3}>
+            {
+                files.map((file, index) => {
+                    return (
+                    <Grid item xs={6} sm={3} key={index}>
+                        <Button color="inherit" onClick={() => handleOnClick(file)}>
+                            {!file.folder && <ZDFileItem selected={selectedItem != null ? '#ADD8E6' : 'transparent'} fileName={file.name} fileType={file.type}/>}
+                        </Button>
+                    </Grid>
+                )})
+            }
+        </Grid> : renderNoFilesView()
+        return data
+    }
+
+
+    const renderNoFilesView = () => {
+        return(
+            <NoFileView>
+                <img src={NoFilesIcon} width="200" height="200"/>
+            </NoFileView>
+        )
+    }
+    const renderFilesListView = () =>{
+        return(
+            <ListGroup variant="flush">
+               {
+                    files && files.length > 0? files.map((file, index) => {
+                        return (
+                        <ListGroup.Item> 
+                            <Button 
+                                color="inherit"
+                                key={file.name}
+                                style={{width: '100%',  border:"none", outline:"none"}} 
+                                className="d-flex flex-row justify-content-start align-items-center"
+                                onClick={() => handleOnClick(file)}>
+                                <ZDFileTypeIcon fileType={file.type} iconWidth={'40px'} iconHeight={'40px'} isSmall={true}/>
+                                <Typography variant="h7" component="div" style={{marginLeft: '30px'}}>
+                                    {file.name}
+                                </Typography>  
+                            </Button>
+                            
+                        </ListGroup.Item>
+                        
+                    )})
+                    : renderNoFilesView()
+               }
+            </ListGroup>
+        )
+    }
+
+    const renderDisplayButtons = () => {
+        return(
+            <DisplayOptionsView>
+                <Typography variant="h5" component="div">
+                        {'Files'}
+                </Typography> 
+                <GridListOptions>
+                    <IconButton onClick={() => setIsListView(true)}>
+                        <FormatListBulleted/>
+                    </IconButton>
+                    <IconButton  onClick={() => setIsListView(false)}>
+                        <GridView/>
+                    </IconButton>
+                </GridListOptions>
+            </DisplayOptionsView>
+        )
+     
+    }
+
     return(
         <ContentView>
             <MainContentView>
@@ -102,11 +180,11 @@ export function ZDMainContent(props){
                 <FilesView borderColor={COLORS.borderColor}>
                     {renderPath()}
                     <Typography variant="h5" component="div" style={{marginTop:'10px', marginLeft: '10px'}}>
-                        {'Folders'}
+                        {folders && folders.length > 0 ? 'Folders' : 'No Folders'}
                     </Typography>  
                     <Grid container spacing={3}>
                         {
-                            folders ? folders.map((file, index) => {
+                            folders && folders.length > 0? folders.map((file, index) => {
                                 return (
                                 <Grid item xs={6} sm={3} key={index}>
                                     <Button color="inherit" onClick={() => handleOnClick(file)} onDoubleClick={() => handleDoubleClick(file)}>
@@ -116,25 +194,11 @@ export function ZDMainContent(props){
                             )})
                             : <div></div>
                         }
-                    </Grid>
-                    <Typography variant="h5" component="div" style={{marginTop:'30px', marginLeft: '10px'}}>
-                        {'Files'}
-                    </Typography>  
-                    <Grid container spacing={3}>
-                        {
-                            files ? files.map((file, index) => {
-                                return (
-                                <Grid item xs={6} sm={3} key={index}>
-                                    <Button color="inherit" onClick={() => handleOnClick(file)}>
-                                        {!file.folder && <ZDFileItem selected={selectedItem != null ? '#ADD8E6' : 'transparent'} fileName={file.name} fileType={file.type}/>}
-                                    </Button>
-                                </Grid>
-                            )})
-                            : <div></div>
-                        }
-                    </Grid>
+                    </Grid> 
+                    {renderDisplayButtons()}
+                    {isListview ? renderFilesListView() : renderFilesIconView()}
                 </FilesView>
-                <ZDRightContent item={selectedItem} updatedData={handleUpdateData}/>
+                <ZDRightContent item={selectedItem} updatedData={handleUpdateData} isSharedTab={dropDownOption == 20} updateOption={() => {setDropDownOption(10)}}/>
             </FilesAndDetailsView>
            
         </ContentView>

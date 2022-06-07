@@ -8,7 +8,7 @@ import {fetchFileNames, uploadFileToServer, getAllSharedFiles, getAllDeletedFile
 import { ZDFileDialog } from './ZDFileDialog';
 import { ZDFolderDialog } from './ZDFolderDialog';
 import { deleteAllPath } from '../Manager/ZDDataUtils';
-
+import logo from '../assets/logo.png'
 
 export function ZDLeftMenu(props){
     const [anchorEl, setAnchorEl] = useState(null);
@@ -81,10 +81,6 @@ export function ZDLeftMenu(props){
         })
     }
 
-    const handleNavigation = () => {
-
-    }
-
     const renderListItems= () => {
         return(
             <OptionsContainer>
@@ -110,7 +106,7 @@ export function ZDLeftMenu(props){
     return(
         <LeftMenuView borderColor={COLORS.borderColor}>
             <LeftContent>
-                <h1>ZotDrive</h1>
+                <img src={logo} style={{width:'200px', height: '120px', marginBottom: '20px'}}/>
                 <StyledButton 
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"

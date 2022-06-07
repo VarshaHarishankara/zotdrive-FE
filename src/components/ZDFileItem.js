@@ -9,12 +9,12 @@ export const ZDFileItem = (props) => {
             <FileInitialView>
                 <InitialContainer>
                         <Typography noWrap variant="h3" component="div" sx={{color: 'white'}}>
-                            {'A'}
+                            {props.fileName.charAt(0)}
                         </Typography> :            
                 </InitialContainer>                
             </FileInitialView>
             <FileNameView>
-                <ZDFileTypeIcon fileType={props.fileType} iconWidth={'20px'} iconHeight={'20px'} isSmall={true}/>
+                <ZDFileTypeIcon fileType={props.fileType} iconWidth={'30px'} iconHeight={'30px'} isSmall={true}/>
                 <Typography noWrap variant="h7" component="div" sx={{marginLeft: '8px'}}>
                     {props.fileName}
                 </Typography>    

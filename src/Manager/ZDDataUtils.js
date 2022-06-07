@@ -43,3 +43,8 @@ export const getFoldersAndFiles = (data) => {
         files: fileList
     }
 }
+
+export const getSharedWithList = (user) => {
+    let users = []
+    
+}
