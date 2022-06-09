@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {ClearView,DetailsView,DetailRowView,FileOptionsView,RightContentView,RightLabelView,RightContentDefaultView, RestoreView, FileIconView} from './styles';
 import {Button, ListItemText, ListItemIcon, Menu,MenuItem, Typography} from '@mui/material';
-import {Clear, Delete, Download, Edit, Folder, MoreHoriz, Share, Info} from '@mui/icons-material';
+import {Clear, Delete, Download, Edit, Folder, MoreHoriz, Share, Send, Info} from '@mui/icons-material';
 import {deleteFile,downloadFile, openFile, fetchFileNames, restoreFile} from '../Manager/ZDDataManager'
 import { ZDEditDialog } from './ZDEditDialog';
 import { ZDShareDialog } from './ZDShareDialog';

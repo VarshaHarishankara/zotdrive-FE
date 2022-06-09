@@ -58,7 +58,7 @@ export function ZDMainContent(props){
     }
 
     const handleMenuItemClick = (value) =>{
-        console.log(value)
+
         setDropDownOption(value)
         props.navigateLocation(value)
     }

@@ -9,7 +9,7 @@ export function ZDSearchBar(props){
 
     const handleRequestSearch = () => {
         fetchFilesWithText(searchText,false,(result)=>{
-            console.log(result)
+
             props.updatedData(result)
         },()=>{
             alert("Error! Could not fetch files")

@@ -286,3 +286,17 @@ export const fetchFilesWithText = (query, deleted, success, failure) => {
     failure()
   });
 }
+
+export const getShareableLink = (object, success, failure) => {
+  const url = "/file-chunk/shareLink"
+  const params={
+    object_id: object.objectid
+  }
+
+  GET_API(url,params,(response)=>{
+    success(response)
+  }, (error) => {
+      failure()
+  })
+
+}

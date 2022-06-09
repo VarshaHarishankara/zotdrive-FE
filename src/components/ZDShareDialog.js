@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Button, Grid} from '@mui/material';
+import {Button, Grid,Snackbar} from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -8,7 +8,8 @@ import Slide from '@mui/material/Slide';
 import {shareFile, unshareFile} from '../Manager/ZDDataManager'
 import TextField from '@mui/material/TextField';
 import {FormDialog,SharedPeopleView} from './styles';
-import CancelIcon from '@mui/icons-material/Cancel';
+import {Cancel, Link} from '@mui/icons-material';
+import {getShareableLink} from '../Manager/ZDDataManager'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -16,6 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export const ZDShareDialog = (props) => {
     const [open, setOpen] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [emailId, setEmailId] = useState("");
     const sharedList = props.item.userList
     useEffect(() => {
@@ -25,6 +27,13 @@ export const ZDShareDialog = (props) => {
     const handleClose = () => {
         props.handleShareDialogClose(false)
         setOpen(false);
+    };
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+          }
+        setSnackbarOpen(false);
     };
 
     const handleCreateClick = () => {
@@ -46,6 +55,16 @@ export const ZDShareDialog = (props) => {
 
     const handleEmailIdChange = (event) => {
         setEmailId(event.target.value);
+    }
+
+    const handleShareLinkClick = () => {
+        setSnackbarOpen(true)
+        handleClose()
+        getShareableLink(props.item, (response) => {
+            navigator.clipboard.writeText(response.data) 
+        },() => {
+            alert("Error! Could not fetch link")
+        })
     }
 
     const handleEmailClick = (email) => {
@@ -76,7 +95,7 @@ export const ZDShareDialog = (props) => {
                         {
                             sharedList.map((object) => {
                                 return(
-                                    <Button style={{marginRight: '10px', marginBottom: '10px'}}color="inherit" key={object.user.email} variant="contained" endIcon={<CancelIcon />} onClick={() => handleEmailClick(object.user.email)}>
+                                    <Button style={{marginRight: '10px', marginBottom: '10px'}}color="inherit" key={object.user.email} variant="contained" endIcon={<Cancel />} onClick={() => handleEmailClick(object.user.email)}>
                                         {object.user.email}
                                     </Button>
                                 )
@@ -93,6 +112,13 @@ export const ZDShareDialog = (props) => {
                         onChange={handleEmailIdChange}
                     />
                 </FormDialog>
+            <Button onClick={handleShareLinkClick} startIcon={<Link/>}>Copy link</Button>   
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                message="Link Copied"
+            /> 
             </DialogContent>
             <DialogActions>
             <Button onClick={handleCancelClick}>Cancel</Button>

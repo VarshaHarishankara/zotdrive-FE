@@ -6,6 +6,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import {SharedPeopleView} from './styles';
+import {getSharedWithList} from '../Manager/ZDDataUtils'
+import {Link} from '@mui/icons-material';
+import {getShareableLink} from '../Manager/ZDDataManager'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -13,7 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export const ZDSharedDetailsDialog = (props) => {
     const [open, setOpen] = useState(false);
-    const sharedList =props.item.userList
+    const sharedList = getSharedWithList(props.item)
     const emailId = localStorage.getItem("emailId")
 
     useEffect(() => {
@@ -25,6 +28,14 @@ export const ZDSharedDetailsDialog = (props) => {
         setOpen(false);
     };
 
+    const handleShareLinkClick = () => {
+        handleClose()
+        getShareableLink(props.item, (link) => {
+            console.log(link)
+        },() => {
+            alert("Error! Could not fetch link")
+        })
+    }
     return (
         <div>
         <Dialog
@@ -42,8 +53,8 @@ export const ZDSharedDetailsDialog = (props) => {
                     {sharedList && sharedList.length > 0 &&  <Grid container spacing={1}>
                         {
                             sharedList.map((object) => {
-                                const button = object.user.email != emailId ? <Button key={object.user.email} style={{marginRight: '10px', marginBottom: '10px'}}color="inherit" key={object.user.email} variant="contained">
-                                {object.user.email}
+                                const button = object.email != emailId ? <Button key={object.email} style={{marginRight: '10px', marginBottom: '10px'}}color="inherit" key={object.email} variant="contained">
+                                {object.email}
                             </Button> :<div></div>
                                 return(
                                     button
@@ -53,6 +64,7 @@ export const ZDSharedDetailsDialog = (props) => {
                         }
                     </Grid>}
                 </SharedPeopleView>
+            <Button onClick={handleShareLinkClick} startIcon={<Link/>}>Copy link</Button>    
             </DialogContent>
             <DialogActions>
             <Button onClick={handleClose}>Ok</Button>

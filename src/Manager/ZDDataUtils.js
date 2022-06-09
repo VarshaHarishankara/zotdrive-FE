@@ -31,6 +31,7 @@ export const getFoldersAndFiles = (data) => {
     let folderList = []
     let fileList = []
     data && data.map((item)=>{
+        console.log(item)
         if(item.folder){
             folderList.push(item)
         }else{
@@ -46,6 +47,9 @@ export const getFoldersAndFiles = (data) => {
 
 export const getSharedWithList = (user) => {
     let users = []
-
-    user.push(user.cre)
+    user && user.userList && user.userList.map((object)=>{
+        users.push(object.user)
+    })
+    users.push(user.createdBy)
+    return users
 }
